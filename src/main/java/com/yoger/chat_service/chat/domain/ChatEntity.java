@@ -14,12 +14,14 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "chat_table")
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 public class ChatEntity extends BaseEntity {
 
     @Id

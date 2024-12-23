@@ -12,9 +12,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @Table(name = "message_table")
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,7 +27,7 @@ public class MessageEntity extends BaseEntity {
     @Column(name = "message_id")
     private Long id;
 
-    private String text;
+    private String message;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_id")

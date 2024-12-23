@@ -1,0 +1,18 @@
+spring:
+  datasource: # mysql
+    url: jdbc:mysql://localhost:3306/kim
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 1234
+  jpa: # jpa settings
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+  data:
+    redis:
+      timeout: 500ms
+      host: localhost
+      port: 6379
+      password: 123
+      userTTL: 10
+      jwtTTL: 30

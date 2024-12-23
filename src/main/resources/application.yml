@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: chat_service
+  profiles:
+    default: dev
