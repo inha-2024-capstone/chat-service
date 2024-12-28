@@ -10,14 +10,17 @@ import com.yoger.chat_service.websocket.dto.ChatMessage;
 import com.yoger.chat_service.websocket.publisher.RedisMessagePublisher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MessageService {
     private final MessagePersistService messagePersistService;
     private final ChatPersistService chatPersistService;
     private final RedisMessagePublisher redisPublisher;
 
+    @Transactional(readOnly = false)
     public ChatMessageResponseDTO sendMessage(ChatMessageRequestDTO chatMessageRequestDTO) {
         ChatEntity chatEntity = chatPersistService.findById(chatMessageRequestDTO.chatId());
         MessageEntity messageEntity = MessageEntityMapper.toMessageEntity(chatMessageRequestDTO, chatEntity);

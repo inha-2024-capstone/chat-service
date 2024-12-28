@@ -1,5 +1,9 @@
 package com.yoger.chat_service.redis.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.yoger.chat_service.websocket.dto.ChatMessage;
 import com.yoger.chat_service.websocket.subscriber.RedisMessageSubscriber;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +16,7 @@ import org.springframework.data.redis.listener.PatternTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
@@ -24,13 +29,11 @@ public class RedisConfig {
     private Integer redisPort;
 
     @Value("${spring.data.redis.password}")
-    private Integer redisPwd;
+    private String redisPwd;
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        // 예: localhost:6379
         RedisStandaloneConfiguration config = new RedisStandaloneConfiguration(redisHost, redisPort);
-        // 필요 시 password 등 설정
         return new LettuceConnectionFactory(config);
     }
 
@@ -39,36 +42,42 @@ public class RedisConfig {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
 
-        // 직렬화 설정 (간단 예시)
+        GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer();
+
         template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        template.setValueSerializer(serializer);
         template.afterPropertiesSet();
         return template;
     }
 
-    /**
-     * Redis Pub/Sub를 위한 MessageListenerContainer
-     * (필요 시 추가 설정)
-     */
     @Bean
-    public RedisMessageListenerContainer redisMessageListenerContainer(
-            RedisConnectionFactory connectionFactory,
-            MessageListenerAdapter messageListenerAdapter) {
+    public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory connectionFactory,
+                                                                       MessageListenerAdapter messageListenerAdapter) {
 
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
-        // 예: "chat-message"라는 채널(sub) 구독
-        container.addMessageListener(messageListenerAdapter,
-                new PatternTopic("chat-message"));
+
+        container.addMessageListener(messageListenerAdapter, new PatternTopic("chat-message"));
         return container;
     }
 
-    /**
-     * Redis에서 구독 받은 메시지를 처리할 리스너 어댑터
-     * -> 실제 처리는 RedisMessageSubscriber.onMessage(...)로 위임
-     */
     @Bean
-    public MessageListenerAdapter messageListenerAdapter(RedisMessageSubscriber subscriber) {
-        return new MessageListenerAdapter(subscriber, "onMessage");
+    public MessageListenerAdapter messageListenerAdapter(RedisMessageSubscriber subscriber,
+                                                         Jackson2JsonRedisSerializer<ChatMessage> serializer) {
+        MessageListenerAdapter adapter = new MessageListenerAdapter(subscriber, "onMessage");
+        adapter.setSerializer(serializer);
+        return adapter;
+    }
+
+    @Bean
+    public Jackson2JsonRedisSerializer<ChatMessage> serializer() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        objectMapper.activateDefaultTyping(
+                objectMapper.getPolymorphicTypeValidator(),
+                ObjectMapper.DefaultTyping.NON_FINAL
+        );
+        return new Jackson2JsonRedisSerializer<>(objectMapper, ChatMessage.class);
     }
 }

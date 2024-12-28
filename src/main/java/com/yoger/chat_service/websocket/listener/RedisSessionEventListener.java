@@ -1,6 +1,8 @@
 package com.yoger.chat_service.websocket.listener;
 
 import com.yoger.chat_service.websocket.config.ServerId;
+import com.yoger.chat_service.websocket.session.StompSessionKey;
+import com.yoger.chat_service.websocket.session.StompSessionStore;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -17,33 +19,37 @@ public class RedisSessionEventListener {
 
     private final RedisTemplate<String, Object> redisTemplate;
     private final String serverId; // 현재 서버를 구분할 수 있는 ID
+    private final StompSessionStore stompSessionStore;
 
-    public RedisSessionEventListener(RedisTemplate<String, Object> redisTemplate, ServerId serverId) {
+    public RedisSessionEventListener(RedisTemplate<String, Object> redisTemplate, ServerId serverId,
+                                     StompSessionStore stompSessionStore) {
         this.redisTemplate = redisTemplate;
-        // 예시로 랜덤 UUID 등 서버 식별자
         this.serverId = serverId.getServerId();
+        this.stompSessionStore = stompSessionStore;
     }
 
     @EventListener
     public void handleSessionConnectEvent(SessionConnectEvent event) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
-        String chatId = headerAccessor.getFirstNativeHeader("chatId");
-        String userId = headerAccessor.getFirstNativeHeader("userId");
+
+        String chatId = headerAccessor.getFirstNativeHeader("Chat-Id");
+        String userId = headerAccessor.getFirstNativeHeader("User-Id");
+
         String sessionId = headerAccessor.getSessionId();
 
-        if (chatId != null && userId != null) {
-            String key = chatId + ":" + userId; // 예: "room1:user123"
+        StompSessionKey stompSessionKey = new StompSessionKey(chatId, userId);
+        storeStompSession(stompSessionKey, sessionId);
+    }
 
-            // 서버ID, 세션ID를 저장
-            Map<String, String> value = new HashMap<>();
-            value.put("serverId", serverId);
-            value.put("sessionId", sessionId);
+    private void storeStompSession(StompSessionKey stompSessionKey, String sessionId) {
+        Map<String, String> value = new HashMap<>();
+        value.put("serverId", serverId);
+        value.put("sessionId", sessionId);
 
-            // 해시 구조로 관리
-            redisTemplate.opsForHash().put("WS_SESSION", key, value);
+        stompSessionStore.store(stompSessionKey, sessionId);
 
-            log.info("[CONNECT] key={}, serverId={}, sessionId={}", key, serverId, sessionId);
-        }
+        redisTemplate.opsForHash().put("WS_SESSION", stompSessionKey.getSessionKey(), value);
+        log.info("[CONNECT] key={}, serverId={}, sessionId={}", stompSessionKey.getSessionKey(), serverId, sessionId);
     }
 
     @EventListener
@@ -51,14 +57,14 @@ public class RedisSessionEventListener {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         String sessionId = headerAccessor.getSessionId();
 
-        // "WS_SESSION" 해시 전체를 뒤져 sessionId가 일치하는 항목을 찾음
         Map<Object, Object> allEntries = redisTemplate.opsForHash().entries("WS_SESSION");
         for (Map.Entry<Object, Object> entry : allEntries.entrySet()) {
-            String key = (String) entry.getKey();
+            StompSessionKey key = new StompSessionKey((String) entry.getKey());
             Map<String, String> val = (Map<String, String>) entry.getValue();
 
             if (val.get("sessionId").equals(sessionId)) {
-                redisTemplate.opsForHash().delete("WS_SESSION", key);
+                stompSessionStore.delete(key);
+                redisTemplate.opsForHash().delete("WS_SESSION", key.getSessionKey());
                 log.info("[DISCONNECT] key={}, sessionId={}", key, sessionId);
                 break;
             }

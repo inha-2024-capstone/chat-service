@@ -11,8 +11,7 @@ public class ChatEntityMapper {
                 chatCreateRequestDTO.title(),
                 null,
                 null,
-                null,
-                chatCreateRequestDTO.thumbnailUrl()
+                null
         );
     }
 }

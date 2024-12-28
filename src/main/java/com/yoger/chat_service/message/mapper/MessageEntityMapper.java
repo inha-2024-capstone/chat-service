@@ -8,7 +8,7 @@ public class MessageEntityMapper {
 
     public static MessageEntity toMessageEntity(ChatMessageRequestDTO chatMessageRequestDTO, ChatEntity chatEntity) {
         return new MessageEntity(
-                chatMessageRequestDTO.chatId(),
+                null,
                 chatMessageRequestDTO.message(),
                 chatEntity,
                 chatMessageRequestDTO.senderId(),

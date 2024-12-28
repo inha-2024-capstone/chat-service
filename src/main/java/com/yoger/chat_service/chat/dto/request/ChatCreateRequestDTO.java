@@ -4,7 +4,6 @@ import java.util.List;
 
 public record ChatCreateRequestDTO(
         String title,
-        String thumbnailUrl,
         List<Long> userIds
 ) {
 }

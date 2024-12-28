@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -33,24 +34,18 @@ public class ChatEntity extends BaseEntity {
 
     private String lastMessage;
 
-    private Integer unreadCount;
-
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_id")
+    @OrderBy("createTime ASC")
     private List<MessageEntity> messageEntities;
 
-    private String thumbnailUrl;
 
-
-    public ChatEntity(LocalDateTime createTime, LocalDateTime modifiedTime,
-                      LocalDateTime deletedTime, State state, Long id, String title, String lastMessage,
-                      Integer unreadCount, List<MessageEntity> messageEntities, String thumbnailUrl) {
+    public ChatEntity(LocalDateTime createTime, LocalDateTime modifiedTime, LocalDateTime deletedTime, State state,
+                      Long id, String title, String lastMessage, List<MessageEntity> messageEntities) {
         super(createTime, modifiedTime, deletedTime, state);
         this.id = id;
         this.title = title;
         this.lastMessage = lastMessage;
-        this.unreadCount = unreadCount;
         this.messageEntities = messageEntities;
-        this.thumbnailUrl = thumbnailUrl;
     }
 }
