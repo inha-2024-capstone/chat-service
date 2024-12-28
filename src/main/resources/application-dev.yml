@@ -1,52 +1,52 @@
 spring:
-  datasource: # mysql
-    url: jdbc:mysql://localhost:3306/kim
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: 1234
-  jpa: # jpa settings
-    hibernate:
-      ddl-auto: update
-    show-sql: false
-  data:
-    redis:
-      timeout: 500ms
-      host: localhost
-      port: 6379
-      password: 123
-      userTTL: 10
-      jwtTTL: 30
+    datasource: # mysql
+        url: jdbc:mysql://localhost:3306/kim
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        username: root
+        password: 1234
+    jpa: # jpa settings
+        hibernate:
+            ddl-auto: update
+        show-sql: false
+    data:
+        redis:
+            timeout: 500ms
+            host: localhost
+            port: 6379
+            password: 123
+            userTTL: 10
+            jwtTTL: 30
 
 kafka:
-  admin:
-    bootstrap-servers: http://localhost:10000
-  producer:
-    chat:
-      bootstrap-servers: http://localhost:10000
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-      retries: 999999
-      acks: all
-      buffer-memory: 33554432
-      linger-ms: 5
-      batch-size: 16384
-      enable-idempotence: true
-      request-timeout-ms: 3000
-      delivery-timeout-ms: 10000
-  consumer:
-    notification:
-      bootstrap-servers: http://localhost:10000
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      auto-offset-reset: earliest
-      enable-auto-commit: false
-      group-id: notification-group
-      isolation-level: read_committed
-      max-poll-records: 500
-      fetch-min-size: 1
-      fetch-max-wait: 500
-      heartbeat-interval: 3000
-      max-poll-interval: 300000
+    admin:
+        bootstrap-servers: http://localhost:10000
+    producer:
+        chat:
+            bootstrap-servers: http://localhost:10000
+            key-serializer: org.apache.kafka.common.serialization.StringSerializer
+            value-serializer: org.apache.kafka.common.serialization.StringSerializer
+            retries: 999999
+            acks: all
+            buffer-memory: 33554432
+            linger-ms: 5
+            batch-size: 16384
+            enable-idempotence: true
+            request-timeout-ms: 3000
+            delivery-timeout-ms: 10000
+    consumer:
+        notification:
+            bootstrap-servers: http://localhost:10000
+            key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+            value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+            auto-offset-reset: earliest
+            enable-auto-commit: false
+            group-id: notification-group
+            isolation-level: read_committed
+            max-poll-records: 500
+            fetch-min-size: 1
+            fetch-max-wait: 500
+            heartbeat-interval: 3000
+            max-poll-interval: 300000
 
 notification:
-  sse-emitter-timeout: 300000
+    sse-emitter-timeout: 300000

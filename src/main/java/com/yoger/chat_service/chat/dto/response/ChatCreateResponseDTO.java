@@ -6,15 +6,13 @@ import java.util.List;
 public record ChatCreateResponseDTO(
         Long chatId,
         String title,
-        List<Long> userIds,
-        String thumbnailUrl
+        List<Long> userIds
 ) {
     public static ChatCreateResponseDTO from(ChatEntity chatEntity, List<Long> userIds) {
         return new ChatCreateResponseDTO(
                 chatEntity.getId(),
                 chatEntity.getTitle(),
-                userIds,
-                chatEntity.getThumbnailUrl()
+                userIds
         );
     }
 }

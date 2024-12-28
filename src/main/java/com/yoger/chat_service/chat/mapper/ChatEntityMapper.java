@@ -10,7 +10,6 @@ public class ChatEntityMapper {
                 null,
                 chatCreateRequestDTO.title(),
                 null,
-                null,
                 null
         );
     }
