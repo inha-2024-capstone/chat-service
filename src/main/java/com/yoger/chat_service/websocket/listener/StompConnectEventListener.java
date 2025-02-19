@@ -1,9 +1,9 @@
 package com.yoger.chat_service.websocket.listener;
 
-import com.yoger.chat_service.common.constant.ServerUrl;
-import com.yoger.chat_service.websocket.repository.ChatSessionStore;
+import com.yoger.chat_service.common.constant.SelfServerUrl;
+import com.yoger.chat_service.websocket.repository.ChatSessionService;
 import com.yoger.chat_service.websocket.repository.InMemoryStompSessionStore;
-import com.yoger.chat_service.websocket.repository.PushSessionStore;
+import com.yoger.chat_service.websocket.repository.PushSessionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -17,10 +17,10 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 @RequiredArgsConstructor
 public class StompConnectEventListener {
 
-    private final ServerUrl serverUrl;
+    private final SelfServerUrl selfServerUrl;
     private final InMemoryStompSessionStore inMemoryStompSessionStore;
-    private final ChatSessionStore chatSessionStore;
-    private final PushSessionStore pushSessionStore;
+    private final ChatSessionService chatSessionService;
+    private final PushSessionService pushSessionService;
 
     @EventListener
     public void handleSessionConnectEvent(SessionConnectEvent event) {
@@ -36,7 +36,7 @@ public class StompConnectEventListener {
 
     private void storeStompSession(String userId, String sessionId) {
         inMemoryStompSessionStore.store(sessionId, userId);
-        log.info("[STOMP SESSION CONNECT] key={}, serverId={}, sessionId={}", userId, serverUrl.getServerUrl(), sessionId);
+        log.info("[STOMP SESSION CONNECT] key={}, serverId={}, sessionId={}", userId, selfServerUrl.getServerUrl(), sessionId);
     }
 
     @EventListener
@@ -44,8 +44,8 @@ public class StompConnectEventListener {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         String sessionId = headerAccessor.getSessionId();
 
-        chatSessionStore.deleteAllBySessionIdRedis(sessionId);
-        pushSessionStore.deleteAllBySessionRedis(sessionId);
+        chatSessionService.deleteAllBySessionIdRedis(sessionId);
+        pushSessionService.deleteAllBySessionRedis(sessionId);
         inMemoryStompSessionStore.delete(sessionId);
 
         log.info("[STOMP SESSION DISCONNECT] sessionId={}", sessionId);

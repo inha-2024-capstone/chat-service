@@ -1,27 +1,25 @@
 package com.yoger.chat_service.websocket.listener;
 
 import com.yoger.chat_service.websocket.repository.InMemoryStompSessionStore;
-import com.yoger.chat_service.websocket.repository.PushSessionStore;
+import com.yoger.chat_service.websocket.repository.PushSessionService;
 import com.yoger.chat_service.websocket.session.key.ChatSessionKey;
-import com.yoger.chat_service.websocket.repository.ChatSessionStore;
+import com.yoger.chat_service.websocket.repository.ChatSessionService;
 import com.yoger.chat_service.websocket.session.key.PushSessionKey;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 import org.springframework.web.socket.messaging.SessionUnsubscribeEvent;
 
 @Component
 @Slf4j
-@Repository
 @RequiredArgsConstructor
 public class StompSubEventListener {
 
-    private final ChatSessionStore chatSessionStore;
-    private final PushSessionStore pushSessionStore;
+    private final ChatSessionService chatSessionService;
+    private final PushSessionService pushSessionService;
     private final InMemoryStompSessionStore inMemoryStompSessionStore;
 
     private final static String CHAT_SUB_PREFIX = "/sub/chat/";
@@ -53,9 +51,9 @@ public class StompSubEventListener {
 
         // 둘 중 하나에 존재하면 삭제함.
         if (subId.startsWith(CHAT_SUB_ID_PREFIX)) {
-            chatSessionStore.unSubscribe(sessionId, subId);
+            chatSessionService.unSubscribe(sessionId, subId);
         } else if (subId.startsWith(PUSH_SUB_ID_PREFIX)) {
-            pushSessionStore.unSubscribe(sessionId, subId);
+            pushSessionService.unSubscribe(sessionId, subId);
         }
 
         log.info("[WEBSOCKET UNSUBSCRIBE] sessionId={}, subId={}", sessionId, subId);
@@ -92,13 +90,13 @@ public class StompSubEventListener {
     }
 
     private void storeChatSession(ChatSessionKey chatSessionKey, String sessionId, String subId) {
-        chatSessionStore.subscribe(chatSessionKey, sessionId, subId);
+        chatSessionService.subscribe(chatSessionKey, sessionId, subId);
         log.info("[CHAT SUBSCRIBE] key={}, sessionId={}, subscribed well", chatSessionKey.getSessionKey(),
                 sessionId);
     }
 
     private void storePushSession(PushSessionKey pushSessionKey, String sessionId, String subId) {
-        pushSessionStore.subscribe(pushSessionKey, sessionId, subId);
+        pushSessionService.subscribe(pushSessionKey, sessionId, subId);
         log.info("[PUSH SUBSCRIBE] key={}, sessionId={}, subscribed well", pushSessionKey.getSessionKey(),
                 sessionId);
     }

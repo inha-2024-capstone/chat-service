@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
-@Repository
+@Service
 @RequiredArgsConstructor
 @Slf4j
-public class PushSessionStore {
+public class PushSessionService {
     private final InMemoryStompSessionStore inMemoryStompSessionStore;
     private final RedisStompSessionStore redisStompSessionStore;
 

@@ -4,9 +4,9 @@ import com.yoger.chat_service.websocket.session.value.StompInMemorySession;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
-@Component
+@Repository
 @Slf4j
 public class InMemoryStompSessionStore {
 

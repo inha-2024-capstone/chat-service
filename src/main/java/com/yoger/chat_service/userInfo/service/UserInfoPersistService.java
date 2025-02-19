@@ -13,7 +13,7 @@ public class UserInfoPersistService {
 
     public UserInfoEntity findById(Long id) {
         return userInfoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("해당 ID에 해당하는 기업 정보가 존재하지 않습니다."));
+                .orElseThrow(() -> new RuntimeException("해당 ID에 해당하는 유저 정보가 존재하지 않습니다."));
     }
 
     public List<UserInfoEntity> findAllById(List<Long> ids) {

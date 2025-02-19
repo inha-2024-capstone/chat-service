@@ -18,8 +18,8 @@ public class SwaggerConfig {
 
     private Info apiInfo() {
         return new Info()
-                .title("Mog Auth Server Swagger")
-                .description("Mog 채팅, 푸쉬 서비스에 대한 API")
+                .title("YOGER Chat Server Swagger")
+                .description("YOGER 채팅, 푸쉬 서비스에 대한 API")
                 .version("1.0.0");
     }
 }

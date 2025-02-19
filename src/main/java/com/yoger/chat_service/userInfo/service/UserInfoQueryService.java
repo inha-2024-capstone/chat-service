@@ -8,15 +8,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = false)
 public class UserInfoQueryService {
     private final UserInfoPersistService userInfoPersistService;
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<UserInfoEntity> findAllByIds(List<Long> ids) {
         return userInfoPersistService.findAllById(ids);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public UserInfoEntity findById(Long id) {
         return userInfoPersistService.findById(id);
     }

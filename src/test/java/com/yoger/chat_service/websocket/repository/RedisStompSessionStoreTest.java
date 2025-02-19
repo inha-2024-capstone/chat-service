@@ -2,7 +2,7 @@ package com.yoger.chat_service.websocket.repository;
 
 import static org.assertj.core.api.Assertions.*;
 
-import com.yoger.chat_service.common.constant.ServerUrl;
+import com.yoger.chat_service.common.constant.SelfServerUrl;
 import com.yoger.chat_service.websocket.session.value.StompRedisSession;
 import java.util.Map;
 import org.junit.jupiter.api.AfterEach;
@@ -18,7 +18,7 @@ class RedisStompSessionStoreTest {
     private RedisStompSessionStore redisStompSessionStore;
 
     @Autowired
-    private ServerUrl serverUrl;
+    private SelfServerUrl selfServerUrl;
     private static final String sessionName = "TEST";
 
     @AfterEach
@@ -34,7 +34,7 @@ class RedisStompSessionStoreTest {
         String sessionId = "TEST_ID";
         String subId = "TEST SUB ID";
 
-        StompRedisSession expectedSession = new StompRedisSession(serverUrl.getServerUrl(), sessionId, subId);
+        StompRedisSession expectedSession = new StompRedisSession(selfServerUrl.getServerUrl(), sessionId, subId);
         //when
         redisStompSessionStore.store(sessionName, sessionKey, sessionId, subId);
         //then
@@ -49,7 +49,7 @@ class RedisStompSessionStoreTest {
         String sessionKey = "test:1";
         String sessionId = "TEST_ID";
         String subId = "TEST SUB ID";
-        StompRedisSession session = new StompRedisSession(serverUrl.getServerUrl(), sessionId, subId);
+        StompRedisSession session = new StompRedisSession(selfServerUrl.getServerUrl(), sessionId, subId);
         //when
         redisStompSessionStore.store(sessionName, sessionKey, sessionId, subId);
         //then
@@ -68,7 +68,7 @@ class RedisStompSessionStoreTest {
         String sessionKey = "test:1";
         String sessionId = "TEST_ID";
         String subId = "TEST SUB ID";
-        StompRedisSession session = new StompRedisSession(serverUrl.getServerUrl(), sessionId, subId);
+        StompRedisSession session = new StompRedisSession(selfServerUrl.getServerUrl(), sessionId, subId);
         //when
         redisStompSessionStore.store(sessionName, sessionKey, sessionId, subId);
         //then
@@ -88,7 +88,7 @@ class RedisStompSessionStoreTest {
         String sessionKey2 = "test:2";
         String sessionId = "TEST_ID";
         String subId = "TEST SUB ID";
-        StompRedisSession session = new StompRedisSession(serverUrl.getServerUrl(), sessionId, subId);
+        StompRedisSession session = new StompRedisSession(selfServerUrl.getServerUrl(), sessionId, subId);
         //when
         redisStompSessionStore.store(sessionName, sessionKey1, sessionId, subId);
         redisStompSessionStore.store(sessionName, sessionKey2, sessionId, subId);

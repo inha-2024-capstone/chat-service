@@ -2,7 +2,7 @@ package com.yoger.chat_service.websocket.repository.chat;
 
 import static org.assertj.core.api.Assertions.*;
 
-import com.yoger.chat_service.websocket.repository.ChatSessionStore;
+import com.yoger.chat_service.websocket.repository.ChatSessionService;
 import com.yoger.chat_service.websocket.repository.InMemoryStompSessionStore;
 import com.yoger.chat_service.websocket.session.key.ChatSessionKey;
 import com.yoger.chat_service.websocket.session.value.StompUserSession;
@@ -23,10 +23,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ChatSessionStoreTest {
+class ChatSessionServiceTest {
 
     @Autowired
-    private ChatSessionStore chatSessionStore;
+    private ChatSessionService chatSessionService;
 
     @Autowired
     private InMemoryStompSessionStore inMemoryStompSessionStore;
@@ -36,7 +36,7 @@ class ChatSessionStoreTest {
 
     @AfterEach
     void afterTest() {
-        chatSessionStore.deleteAll();
+        chatSessionService.deleteAll();
     }
 
     @ParameterizedTest
@@ -48,10 +48,10 @@ class ChatSessionStoreTest {
         //when
         IntStream.range(0, 3).forEach(i -> {
             inMemoryStompSessionStore.store(sessionIds.get(i), keys.get(i).getUserId());
-            chatSessionStore.subscribe(keys.get(i), sessionIds.get(i), subId);
+            chatSessionService.subscribe(keys.get(i), sessionIds.get(i), subId);
         });
-        Map<String, List<StompUserSession>> connectedSessions = chatSessionStore.findConnectedSessions(userIds, "1");
-        List<Long> unconnectedUserIds = chatSessionStore.findUnconnectedUserIds(userIds, "1");
+        Map<String, List<StompUserSession>> connectedSessions = chatSessionService.findConnectedSessions(userIds, "1");
+        List<Long> unconnectedUserIds = chatSessionService.findUnconnectedUserIds(userIds, "1");
         //then
         connectedSessions.forEach((key, value) -> {
             assertThat(key).isEqualTo(serverUrl);
@@ -114,13 +114,13 @@ class ChatSessionStoreTest {
         StompUserSession expected = new StompUserSession(userId, sessionId, subId);
         //when
         inMemoryStompSessionStore.store(sessionId, String.valueOf(userId));
-        chatSessionStore.subscribe(chatSessionKey, sessionId, subId);
-        Map<String, List<StompUserSession>> connectedSessionsBefore = chatSessionStore.findConnectedSessions(List.of(userId),
+        chatSessionService.subscribe(chatSessionKey, sessionId, subId);
+        Map<String, List<StompUserSession>> connectedSessionsBefore = chatSessionService.findConnectedSessions(List.of(userId),
                 String.valueOf(chatId));
 
-        chatSessionStore.unSubscribe(sessionId, subId);
+        chatSessionService.unSubscribe(sessionId, subId);
 
-        Map<String, List<StompUserSession>> connectedSessionsAfter = chatSessionStore.findConnectedSessions(List.of(userId),
+        Map<String, List<StompUserSession>> connectedSessionsAfter = chatSessionService.findConnectedSessions(List.of(userId),
                 String.valueOf(chatId));
 
         //then

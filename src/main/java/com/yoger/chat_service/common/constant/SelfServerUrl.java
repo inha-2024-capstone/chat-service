@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ServerUrl {
-    @Value("${spring.kafka.SERVER-IP}")
+public class SelfServerUrl {
+    @Value("${self-server-url}")
     private String serverUrl;
 }

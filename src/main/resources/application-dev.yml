@@ -15,7 +15,6 @@ spring:
             port: 6379
             password: 123
     kafka:
-        SERVER-IP: "http://localhost:${server.port}"
         bootstrap-servers:
             - localhost:9092
         producer:
@@ -46,3 +45,5 @@ spring:
 logging:
     level:
         web: debug
+
+self-server-url: "http://localhost:${server.port}"

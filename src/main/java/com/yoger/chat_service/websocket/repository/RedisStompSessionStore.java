@@ -1,6 +1,6 @@
 package com.yoger.chat_service.websocket.repository;
 
-import com.yoger.chat_service.common.constant.ServerUrl;
+import com.yoger.chat_service.common.constant.SelfServerUrl;
 import com.yoger.chat_service.websocket.session.value.StompRedisSession;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -13,11 +13,11 @@ import org.springframework.stereotype.Repository;
 @Slf4j
 public class RedisStompSessionStore {
     private final RedisTemplate<String, StompRedisSession> sessionTemplate;
-    private final ServerUrl serverUrl;
+    private final SelfServerUrl selfServerUrl;
 
     public void store(String sessionName, String sessionKey, String sessionId, String subId) {
         sessionTemplate.opsForHash()
-                .put(sessionName, sessionKey, new StompRedisSession(serverUrl.getServerUrl(), sessionId, subId));
+                .put(sessionName, sessionKey, new StompRedisSession(selfServerUrl.getServerUrl(), sessionId, subId));
     }
 
     public StompRedisSession findBySessionKey(String sessionName, String sessionKey) {
