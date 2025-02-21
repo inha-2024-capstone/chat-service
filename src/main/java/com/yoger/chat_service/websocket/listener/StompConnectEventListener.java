@@ -1,9 +1,9 @@
 package com.yoger.chat_service.websocket.listener;
 
 import com.yoger.chat_service.common.constant.SelfServerUrl;
-import com.yoger.chat_service.websocket.repository.ChatSessionService;
+import com.yoger.chat_service.websocket.service.ChatSessionService;
 import com.yoger.chat_service.websocket.repository.InMemoryStompSessionStore;
-import com.yoger.chat_service.websocket.repository.PushSessionService;
+import com.yoger.chat_service.websocket.service.PushSessionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;

@@ -2,7 +2,7 @@ package com.yoger.chat_service.websocket.repository.chat;
 
 import static org.assertj.core.api.Assertions.*;
 
-import com.yoger.chat_service.websocket.repository.ChatSessionService;
+import com.yoger.chat_service.websocket.service.ChatSessionService;
 import com.yoger.chat_service.websocket.repository.InMemoryStompSessionStore;
 import com.yoger.chat_service.websocket.session.key.ChatSessionKey;
 import com.yoger.chat_service.websocket.session.value.StompUserSession;
