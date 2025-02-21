@@ -9,7 +9,7 @@ import com.yoger.chat_service.notification.dto.request.ChatPushBatchRequestDTO;
 import com.yoger.chat_service.notification.service.PushingService;
 import com.yoger.chat_service.userInfo.domain.UserInfoEntity;
 import com.yoger.chat_service.userInfo.service.UserInfoQueryService;
-import com.yoger.chat_service.websocket.repository.ChatSessionService;
+import com.yoger.chat_service.websocket.service.ChatSessionService;
 import com.yoger.chat_service.websocket.session.key.ChatSessionKey;
 import java.util.HashMap;
 import java.util.List;

@@ -8,13 +8,9 @@ import java.util.Map;
 
 public record ChatPushBatchRequestDTO(
         Long chatId,
-
         Long senderId,
-
         String chatMessage,
-
         LocalDateTime pushedAt,
-
         Map<Long, SessionInfo> sessionMap
 ) {
     public static ChatPushBatchRequestDTO from(ChatMessageEvent chatMessageEvent, Map<Long, SessionInfo> sessionMap,

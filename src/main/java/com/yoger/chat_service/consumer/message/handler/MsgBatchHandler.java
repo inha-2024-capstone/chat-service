@@ -1,4 +1,4 @@
-package com.yoger.chat_service.consumer.message;
+package com.yoger.chat_service.consumer.message.handler;
 
 import com.yoger.chat_service.consumer.vo.SessionInfo;
 import com.yoger.chat_service.message.dto.request.MessageBatchRequestDTO;
