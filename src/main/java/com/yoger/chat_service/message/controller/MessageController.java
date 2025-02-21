@@ -24,13 +24,12 @@ public class MessageController {
     @PostMapping("/rcv")
     public ResponseEntity<BaseResponseBody<Void>> receiveMessage(@RequestBody MessageBatchRequestDTO messageBatchRequestDTO) {
         messagingService.sendToSubs(messageBatchRequestDTO);
-        return ResponseEntity
-                .status(SuccessStatus.OK.getHttpStatus())
-                .body(SuccessStatus.OK.getResponseBody());
+        return SuccessStatus.OK.getResponseBody();
     }
 
     @MessageMapping("/msg")
-    public void sendMessage(ChatMessageRequestDTO chatMessageRequestDTO) {
+    public ResponseEntity<BaseResponseBody<Void>> sendMessage(ChatMessageRequestDTO chatMessageRequestDTO) {
         messagingService.sendMessage(chatMessageRequestDTO);
+        return SuccessStatus.OK.getResponseBody();
     }
 }

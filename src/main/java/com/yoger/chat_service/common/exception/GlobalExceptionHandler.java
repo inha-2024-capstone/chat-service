@@ -13,10 +13,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<BaseResponseBody<?>> userExHandler(Exception exception) {
+    public ResponseEntity<BaseResponseBody<String>> userExHandler(Exception exception) {
         log.debug(exception.getMessage());
         log.debug(Arrays.toString(exception.getStackTrace()));
-        return ResponseEntity.status(FailureStatus.INTERNAL_SERVER_ERROR.getHttpStatus())
-                .body(FailureStatus.INTERNAL_SERVER_ERROR.getResponseBody(exception.getMessage()));
+        return FailureStatus.INTERNAL_SERVER_ERROR.getResponseBody(exception.getMessage());
     }
 }
