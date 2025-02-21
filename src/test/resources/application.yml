@@ -1,0 +1,54 @@
+spring:
+  datasource: # mysql
+    url: jdbc:mysql://localhost:3306/kim
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 1234
+  jpa: # jpa settings
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 30
+        order_updates: true
+        order_inserts: true
+  data:
+    redis:
+      timeout: 500ms
+      host: localhost
+      port: 6379
+      password: 123
+  kafka:
+    SERVER-IP: "http://localhost:8080"
+    bootstrap-servers:
+      - localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      properties:
+        enable-idempotence: true
+        max-in-flight-requests-per-connection: 1
+        retries: 5
+        delivery-timeout-ms: 120000
+    consumer:
+      group-id: chat-group
+      enable-auto-commit: false
+      auto-offset-reset: latest
+      max-poll-records: 500
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        isolation-level: read_committed
+        session.timeout.ms: 30000
+        max.poll.interval.ms: 30000
+        max.poll.records: 100
+        fetch-min-bytes: 40
+        spring.json.trusted.packages: "com.yoger.chat_service.message.event"
+    listener:
+      ack-mode: manual
+logging:
+  level:
+    web: info
