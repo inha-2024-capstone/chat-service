@@ -23,9 +23,8 @@ public class PushController {
     @GetMapping("/all")
     public ResponseEntity<BaseResponseBody<ChatPushesResponseDTO>> findAllPushes(
             @RequestHeader(name = "User-Id") Long userId) {
-
-        return ResponseEntity.status(SuccessStatus.OK.getHttpStatus())
-                .body(SuccessStatus.OK.getResponseBody(pushingService.queryAllPushes(userId)));
+        ChatPushesResponseDTO responseDTO= pushingService.queryAllPushes(userId);
+        return SuccessStatus.OK.getResponseBody(responseDTO);
     }
 
     @MessageMapping("/read")

@@ -24,15 +24,15 @@ public class UserChatController {
     @GetMapping("/all")
     public ResponseEntity<BaseResponseBody<List<UserChatListResponseDTO>>> getAllUserChats(
             @RequestHeader("User-Id") Long userId) {
-        List<UserChatListResponseDTO> allUserChat = userChatService.getAllUserChat(userId);
 
-        return ResponseEntity.status(SuccessStatus.OK.getHttpStatus())
-                .body(SuccessStatus.OK.getResponseBody(allUserChat));
+        List<UserChatListResponseDTO> allUserChat = userChatService.getAllUserChat(userId);
+        return SuccessStatus.OK.getResponseBody(allUserChat);
     }
 
     @DeleteMapping("/delete")
     public ResponseEntity<BaseResponseBody<Void>> deleteUserChat(@RequestBody UserChatDelRequestDTO requestDTO) {
+
         userChatService.deleteUserChat(requestDTO);
-        return ResponseEntity.ok().build();
+        return SuccessStatus.OK.getResponseBody();
     }
 }

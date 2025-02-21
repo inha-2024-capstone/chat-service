@@ -27,23 +27,19 @@ public class ChatRoomController {
     @PostMapping("/create")
     public ResponseEntity<BaseResponseBody<ChatRoomResponseDTO>> createChatRoom(
             @RequestBody ChatCreateRequestDTO chatCreateRequestDTO) {
-        return ResponseEntity
-                .status(SuccessStatus.OK.getHttpStatus())
-                .body(SuccessStatus.OK.getResponseBody(chatService.createChat(chatCreateRequestDTO)));
+        ChatRoomResponseDTO responseDTO = chatService.createChat(chatCreateRequestDTO);
+        return SuccessStatus.CREATED.getResponseBody(responseDTO);
     }
 
     @GetMapping("/get/{chatId}")
     public ResponseEntity<BaseResponseBody<ChatRoomResponseDTO>> createChatRoom(@PathVariable(name = "chatId") Long chatId) {
-        return ResponseEntity
-                .status(SuccessStatus.OK.getHttpStatus())
-                .body(SuccessStatus.OK.getResponseBody(chatService.getChat(chatId)));
+        ChatRoomResponseDTO responseDTO = chatService.getChat(chatId);
+        return SuccessStatus.OK.getResponseBody(responseDTO);
     }
 
     @DeleteMapping("/delete/{chatId}")
     public ResponseEntity<BaseResponseBody<Void>> deleteChatRoom(@PathVariable(name = "chatId") Long chatId) {
         chatService.deleteChatRoom(chatId);
-        return ResponseEntity
-                .status(SuccessStatus.OK.getHttpStatus())
-                .body(SuccessStatus.OK.getResponseBody());
+        return SuccessStatus.OK.getResponseBody();
     }
 }
