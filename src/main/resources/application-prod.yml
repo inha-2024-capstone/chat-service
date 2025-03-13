@@ -43,3 +43,10 @@ spring:
       ack-mode: manual
 
 self-server-url: "http://${SERVER_URL}:${SERVER_PORT}"
+
+springdoc:
+  api-docs:
+    path: /chat/v3/api-docs
+  swagger-ui:
+    path: /chat/swagger-ui.html
+    url: /chat/v3/api-docs
