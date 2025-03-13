@@ -2,6 +2,7 @@ package com.yoger.chat_service.websocket.repository;
 
 import static org.assertj.core.api.Assertions.*;
 
+import com.yoger.chat_service.common.UsingRedisTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class InMemoryStompSessionStoreTest {
+class InMemoryStompSessionStoreTest extends UsingRedisTest {
 
     @Autowired
     private InMemoryStompSessionStore inMemoryStompSessionStore;

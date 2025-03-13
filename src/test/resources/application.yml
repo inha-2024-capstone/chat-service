@@ -1,9 +1,7 @@
 spring:
   datasource: # mysql
-    url: jdbc:mysql://localhost:3306/kim
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: 1234
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    url: jdbc:tc:mysql:8://testDB
   jpa: # jpa settings
     hibernate:
       ddl-auto: update
@@ -21,7 +19,6 @@ spring:
       port: 6379
       password: 123
   kafka:
-    SERVER-IP: "http://localhost:8080"
     bootstrap-servers:
       - localhost:9092
     producer:
@@ -49,6 +46,9 @@ spring:
         spring.json.trusted.packages: "com.yoger.chat_service.message.event"
     listener:
       ack-mode: manual
+
+self-server-url: dummy
+
 logging:
   level:
     web: info
