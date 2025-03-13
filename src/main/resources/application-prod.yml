@@ -1,0 +1,45 @@
+spring:
+  datasource: # mysql
+    url: jdbc:mysql://${DB_URL}:3306/${DB_NAME}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa: # jpa settings
+    hibernate:
+      ddl-auto: ${DB_DDL_AUTO}
+  data:
+    redis:
+      timeout: 500ms
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
+  kafka:
+    bootstrap-servers:
+      - ${KAFKA_BOOTSTRAP_SERVERS}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      properties:
+        enable-idempotence: true
+        max-in-flight-requests-per-connection: 1
+        retries: 5
+        delivery-timeout-ms: 120000
+    consumer:
+      group-id: chat-group
+      enable-auto-commit: false
+      auto-offset-reset: latest
+      max-poll-records: 500
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        isolation-level: read_committed
+        session.timeout.ms: 30000
+        max.poll.interval.ms: 30000
+        max.poll.records: 100
+        fetch-min-bytes: 40
+        spring.json.trusted.packages: "com.yoger.chat_service.message.event,com.mog.authserver.auth.event"
+    listener:
+      ack-mode: manual
+
+self-server-url: "http://${SERVER_URL}:${SERVER_PORT}"
