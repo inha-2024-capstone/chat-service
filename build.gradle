@@ -31,6 +31,8 @@ dependencies {
 	//DB
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	runtimeOnly 'com.mysql:mysql-connector-j'
+
+	//Redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
 	//Web Socket
@@ -46,6 +48,12 @@ dependencies {
 	//UTIL
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	//Test Container
+	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+	testImplementation 'org.testcontainers:junit-jupiter'
+	testImplementation 'org.testcontainers:mysql'
+	testImplementation 'org.testcontainers:kafka'
 
 	// TEST
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
