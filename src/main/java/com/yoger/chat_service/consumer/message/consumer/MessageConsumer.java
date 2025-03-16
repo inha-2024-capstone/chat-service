@@ -1,5 +1,6 @@
 package com.yoger.chat_service.consumer.message.consumer;
 
+import com.yoger.chat_service.common.constant.KafkaConstant;
 import com.yoger.chat_service.consumer.message.service.ChatRelayService;
 import com.yoger.chat_service.message.event.ChatMessageEvent;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,7 @@ public class MessageConsumer {
 
     private final ChatRelayService chatRelayService;
 
-    @KafkaListener(topics = "chat-message", groupId = "chat-group")
+    @KafkaListener(topics = KafkaConstant.MSG_TOPIC, groupId = KafkaConstant.CHAT_GROUP_ID)
     public void consumeMessage(ChatMessageEvent event, Acknowledgment acknowledgment) {
         chatRelayService.relayChatMessage(event);
 

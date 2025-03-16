@@ -2,6 +2,7 @@ package com.yoger.chat_service.websocket.repository.chat;
 
 import static org.assertj.core.api.Assertions.*;
 
+import com.yoger.chat_service.common.UsingRedisTest;
 import com.yoger.chat_service.websocket.service.ChatSessionService;
 import com.yoger.chat_service.websocket.repository.InMemoryStompSessionStore;
 import com.yoger.chat_service.websocket.session.key.ChatSessionKey;
@@ -23,7 +24,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ChatSessionServiceTest {
+class ChatSessionServiceTest extends UsingRedisTest {
 
     @Autowired
     private ChatSessionService chatSessionService;
@@ -31,7 +32,7 @@ class ChatSessionServiceTest {
     @Autowired
     private InMemoryStompSessionStore inMemoryStompSessionStore;
 
-    @Value("${spring.kafka.SERVER-IP}")
+    @Value("${self-server-url}")
     private String serverUrl;
 
     @AfterEach
@@ -115,12 +116,14 @@ class ChatSessionServiceTest {
         //when
         inMemoryStompSessionStore.store(sessionId, String.valueOf(userId));
         chatSessionService.subscribe(chatSessionKey, sessionId, subId);
-        Map<String, List<StompUserSession>> connectedSessionsBefore = chatSessionService.findConnectedSessions(List.of(userId),
+        Map<String, List<StompUserSession>> connectedSessionsBefore = chatSessionService.findConnectedSessions(
+                List.of(userId),
                 String.valueOf(chatId));
 
         chatSessionService.unSubscribe(sessionId, subId);
 
-        Map<String, List<StompUserSession>> connectedSessionsAfter = chatSessionService.findConnectedSessions(List.of(userId),
+        Map<String, List<StompUserSession>> connectedSessionsAfter = chatSessionService.findConnectedSessions(
+                List.of(userId),
                 String.valueOf(chatId));
 
         //then

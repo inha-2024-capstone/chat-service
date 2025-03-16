@@ -2,6 +2,7 @@ package com.yoger.chat_service.websocket.repository;
 
 import static org.assertj.core.api.Assertions.*;
 
+import com.yoger.chat_service.common.UsingRedisTest;
 import com.yoger.chat_service.common.constant.SelfServerUrl;
 import com.yoger.chat_service.websocket.session.value.StompRedisSession;
 import java.util.Map;
@@ -12,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class RedisStompSessionStoreTest {
+class RedisStompSessionStoreTest extends UsingRedisTest {
 
     @Autowired
     private RedisStompSessionStore redisStompSessionStore;
