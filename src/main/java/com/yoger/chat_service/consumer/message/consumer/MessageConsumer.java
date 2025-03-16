@@ -16,7 +16,7 @@ public class MessageConsumer {
 
     private final ChatRelayService chatRelayService;
 
-    @KafkaListener(topics = KafkaConstant.MSG_TOPIC, groupId = "chat-group")
+    @KafkaListener(topics = KafkaConstant.MSG_TOPIC, groupId = KafkaConstant.CHAT_GROUP_ID)
     public void consumeMessage(ChatMessageEvent event, Acknowledgment acknowledgment) {
         chatRelayService.relayChatMessage(event);
 

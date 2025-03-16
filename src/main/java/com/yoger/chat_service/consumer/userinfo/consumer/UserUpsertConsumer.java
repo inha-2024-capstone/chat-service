@@ -16,7 +16,7 @@ public class UserUpsertConsumer {
 
     private final UserUpsertService userUpsertService;
 
-    @KafkaListener(topics = KafkaConstant.USER_TOPIC, groupId = "user-group")
+    @KafkaListener(topics = KafkaConstant.USER_TOPIC, groupId = KafkaConstant.USER_GROUP_ID)
     public void consumeMessage(UserUpsertEvent event, Acknowledgment acknowledgment) {
         userUpsertService.saveUserInfo(event);
         acknowledgment.acknowledge();
